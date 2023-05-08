@@ -125,13 +125,14 @@ class ClientTrader(IClientTrader):
 
     @property
     def broker_type(self):
-        return "ths"
+        return "yh"
 
     @property
     def balance(self):
         self._switch_left_menus(["查询[F4]", "资金股票"])
 
         return self._get_balance_from_statics()
+        # return self._get_grid_data(self._config.BALANCE_GRID_CONTROL_ID)
 
     def _init_toolbar(self):
         self._toolbar = self._main.child_window(class_name="ToolbarWindow32")
@@ -417,7 +418,7 @@ class ClientTrader(IClientTrader):
                 window.close()
 
     def trade(self, security, price, amount):
-        self._set_trade_params(security, price, amount)
+        self._set_trade_params(security, price, amount,type=1)
 
         self._submit_trade()
 
@@ -428,6 +429,11 @@ class ClientTrader(IClientTrader):
     def _click(self, control_id):
         self._app.top_window().child_window(
             control_id=control_id, class_name="Button"
+        ).click()
+
+    def _click_static(self, control_id):
+        self._app.top_window().child_window(
+            control_id=control_id, class_name="Static"
         ).click()
 
     @perf_clock
@@ -451,7 +457,7 @@ class ClientTrader(IClientTrader):
             .window_text()
         )
 
-    def _set_trade_params(self, security, price, amount):
+    def _set_trade_params(self,security, price, amount,type=0):
         code = security[-6:]
 
         self._type_edit_control_keys(self._config.TRADE_SECURITY_CONTROL_ID, code)
@@ -466,14 +472,19 @@ class ClientTrader(IClientTrader):
             self._set_stock_exchange_type("上海Ａ股")
 
         self.wait(0.1)
-
-        self._type_edit_control_keys(
-            self._config.TRADE_PRICE_CONTROL_ID,
-            easyutils.round_price_by_code(price, code),
-        )
-        self._type_edit_control_keys(
-            self._config.TRADE_AMOUNT_CONTROL_ID, str(int(amount))
-        )
+        if price is not None:
+            self._type_edit_control_keys(
+                self._config.TRADE_PRICE_CONTROL_ID,
+                easyutils.round_price_by_code(price, code),
+            )
+        if amount is not None:
+            self._type_edit_control_keys(
+                self._config.TRADE_BUY_AMOUNT_AVAILABLE_CONTROL_ID 
+                if type == 0 else self._config.TRADE_SELL_AMOUNT_AVAILABLE_CONTROL_ID, 
+                str(int(amount))
+            )
+        else:
+            self._click_static(self._config.TRADE_BUY_AMOUNT_AVAILABLE_CONTROL_ID)
 
     def _set_market_trade_params(self, security, amount, limit_price=None):
         self._type_edit_control_keys(

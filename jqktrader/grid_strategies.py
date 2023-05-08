@@ -118,12 +118,12 @@ class Copy(BaseStrategy):
                             control_id=0x964, class_name="Edit"
                         ).set_focus()
 
-                        pywinauto.keyboard.SendKeys("{BKSP}{BKSP}{BKSP}{BKSP}")
+                        pywinauto.keyboard.send_keys("{BKSP}{BKSP}{BKSP}{BKSP}")
 
-                        pywinauto.keyboard.SendKeys(captcha_num)
+                        pywinauto.keyboard.send_keys(captcha_num)
 
                         self._trader.app.top_window().set_focus()
-                        pywinauto.keyboard.SendKeys("{ENTER}")  # 模拟发送enter，点击确定
+                        pywinauto.keyboard.send_keys("{ENTER}")  # 模拟发送enter，点击确定
 
                         if (self._trader.app.top_window().window(class_name="Static", title_re="验证码").exists(timeout=1)):
                             logger.info("验证码识别错误")
