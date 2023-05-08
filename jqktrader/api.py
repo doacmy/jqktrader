@@ -3,6 +3,7 @@ import logging
 import sys
 
 from .clienttrader import ClientTrader
+from .universal_clienttrader import UniversalClientTrader
 from jqktrader.log import logger
 
 
@@ -20,4 +21,4 @@ def use( debug=False, **kwargs):
     if debug:
         logger.setLevel(logging.DEBUG)
 
-    return ClientTrader()
+    return UniversalClientTrader()
