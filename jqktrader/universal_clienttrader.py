@@ -39,13 +39,13 @@ class UniversalClientTrader(clienttrader.BaseLoginClientTrader):
                 except:
                     self.wait(1)
 
-            self.wait(1)
-            # self._app.window(handle=login_window).Edit1.set_focus()
-            # self._app.window(handle=login_window).Edit1.type_keys(user)
+            # self.wait(1)
+            # # self._app.window(handle=login_window).Edit1.set_focus()
+            # # self._app.window(handle=login_window).Edit1.type_keys(user)
 
-            self._app.window(handle=login_window).child_window(
-                control_id=0x3EE, class_name="Button"
-            ).click()
+            # self._app.window(handle=login_window).child_window(
+            #     control_id=0x3EE, class_name="Button"
+            # ).click()
         
 
             # detect login is success or not
@@ -58,3 +58,6 @@ class UniversalClientTrader(clienttrader.BaseLoginClientTrader):
 
         self._close_prompt_windows()
         self._main = self._app.window(title="网上股票交易系统5.0")
+
+    def close_client_window(self):
+        self._app.top_window().close()
